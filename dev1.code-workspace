@@ -5,6 +5,7 @@
 		}
 	],
 	"settings": {
-		"python.pythonPath": "venv\\Scripts\\python.exe"
+		"python.pythonPath": "venv\\Scripts\\python.exe",
+		"python.condaPath": "conda"
 	}
 }
