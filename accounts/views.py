@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from contacts.models import Contact
+from django.contrib.auth.forms import UserChangeForm,PasswordChangeForm
+from accounts.forms import EditProfileForm
+from django.contrib.auth import update_session_auth_hash
+
+
 
 def register(request):
     if request.method == 'POST':
@@ -72,6 +77,38 @@ def dashboard(request):
     context= {
         'contacts': user_contacts
     }
-
-
     return render(request, 'accounts/dashboard.html', context)
+
+def editprofile(request):
+    if request.method == 'POST':
+        form= EditProfileForm(request.POST, instance=request.user)
+
+        if form.is_valid():
+            form.save()
+            return redirect('editprofile')
+        
+    else:
+        form= EditProfileForm(instance=request.user)
+        args ={
+            'form': form
+        }
+        return render(request,'accounts/editprofile.html', args)
+
+def change_password(request):
+    if request.method == 'POST':
+        form= PasswordChangeForm(data=request.POST, user=request.user)
+
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('editprofile')
+        else:
+            messages.error(request, 'Please enter correctly')
+            return redirect('change-password')
+
+    else:
+        form= PasswordChangeForm(user=request.user)
+        args ={
+            'form': form
+        }
+        return render(request,'accounts/change_password.html', args)

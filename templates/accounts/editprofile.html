@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} | Edit Profile {% endblock %}
+
+{% block content %}
+<!-- ALERTS -->
+{% include 'partials/_alerts.html' %}
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+{% endblock %}
